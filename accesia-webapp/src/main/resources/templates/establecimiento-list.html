@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{establecimiento.list.title}">Establecimientos</title>
+</head>
+<body>
+<main class="container">
+    <div class="page-header">
+        <h1 th:text="#{establecimiento.list.heading}">Establecimientos</h1>
+        <a class="btn btn-primary" th:href="@{/establecimientos/new}" th:text="#{nav.new}">Nuevo</a>
+    </div>
+
+    <p class="empty" th:if="${#lists.isEmpty(establecimientos)}" th:text="#{establecimiento.list.empty}"></p>
+
+    <div class="table-wrap" th:unless="${#lists.isEmpty(establecimientos)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th th:text="#{establecimiento.nombre}">Nombre</th>
+                <th th:text="#{establecimiento.tipo}">Tipo</th>
+                <th th:text="#{establecimiento.direccion}">Dirección</th>
+                <th th:text="#{establecimiento.propietario}">Propietario</th>
+                <th th:text="#{establecimiento.aforoMaximo}">Aforo</th>
+                <th th:text="#{establecimiento.precioReferencia}">Precio</th>
+                <th th:text="#{establecimiento.activo}">Activo</th>
+                <th th:text="#{common.actions}">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${establecimientos}">
+                <td>
+                    <img class="thumb" th:if="${e.imagen != null}" th:src="@{'/uploads/' + ${e.imagen}}" alt="">
+                    <span class="thumb thumb-empty" th:unless="${e.imagen != null}">—</span>
+                </td>
+                <td><a th:href="@{/establecimientos/{id}(id=${e.id})}" th:text="${e.nombre}">Nombre</a></td>
+                <td th:text="#{${'establecimiento.tipo.' + e.tipo}}">Tipo</td>
+                <td th:text="${e.direccion}">Dirección</td>
+                <!-- Datos de la entidad relacionada (Usuario) -->
+                <td>
+                    <span th:text="${e.propietario.nombreCompleto}">Propietario</span><br>
+                    <small class="muted" th:text="${e.propietario.email}">email</small>
+                </td>
+                <td th:text="${e.aforoMaximo}">100</td>
+                <td th:text="${#numbers.formatDecimal(e.precioReferencia, 1, 2)} + ' €'">0,00 €</td>
+                <td>
+                    <span class="badge badge-ok" th:if="${e.activo}" th:text="#{common.yes}">Sí</span>
+                    <span class="badge badge-off" th:unless="${e.activo}" th:text="#{common.no}">No</span>
+                </td>
+                <td class="actions">
+                    <a class="btn btn-small" th:href="@{/establecimientos/{id}(id=${e.id})}" th:text="#{common.view}">Ver</a>
+                    <a class="btn btn-small btn-secondary" th:href="@{/establecimientos/{id}/edit(id=${e.id})}" th:text="#{common.edit}">Editar</a>
+                    <form class="inline" method="post"
+                          th:action="@{/establecimientos/{id}/delete(id=${e.id})}"
+                          th:attr="data-confirm=#{common.confirmdelete}"
+                          onsubmit="return confirm(this.dataset.confirm);">
+                        <button class="btn btn-small btn-danger" type="submit" th:text="#{common.delete}">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

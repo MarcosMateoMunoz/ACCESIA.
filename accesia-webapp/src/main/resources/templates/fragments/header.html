@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header" class="site-header">
+    <div class="container header-inner">
+        <a class="brand" th:href="@{/establecimientos}">
+            <span class="brand-name" th:text="#{app.name}">ACCESIA</span>
+            <span class="brand-slogan" th:text="#{app.slogan}">Tu acceso, bajo control</span>
+        </a>
+        <nav class="nav">
+            <a th:href="@{/establecimientos}" th:text="#{nav.list}">Establecimientos</a>
+            <a th:href="@{/establecimientos/new}" th:text="#{nav.new}">Nuevo</a>
+            <span class="lang">
+                <a href="?lang=es" th:classappend="${#locale.language == 'es'} ? 'active'" th:text="#{nav.lang.es}">ES</a>
+                <a href="?lang=en" th:classappend="${#locale.language == 'en'} ? 'active'" th:text="#{nav.lang.en}">EN</a>
+            </span>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

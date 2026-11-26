@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{establecimiento.detail.title}">Detalle</title>
+</head>
+<body>
+<main class="container">
+    <div class="page-header">
+        <h1 th:text="${establecimiento.nombre}">Nombre</h1>
+        <div>
+            <a class="btn btn-secondary" th:href="@{/establecimientos/{id}/edit(id=${establecimiento.id})}" th:text="#{common.edit}">Editar</a>
+            <a class="btn" th:href="@{/establecimientos}" th:text="#{common.back}">Volver</a>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <section class="card">
+            <h2 th:text="#{establecimiento.detail.data}">Datos</h2>
+            <img class="detail-img" th:if="${establecimiento.imagen != null}"
+                 th:src="@{'/uploads/' + ${establecimiento.imagen}}" alt="">
+            <p class="muted" th:unless="${establecimiento.imagen != null}" th:text="#{establecimiento.noimage}">Sin imagen</p>
+            <dl>
+                <dt th:text="#{establecimiento.tipo}">Tipo</dt>
+                <dd th:text="#{${'establecimiento.tipo.' + establecimiento.tipo}}">Tipo</dd>
+
+                <dt th:text="#{establecimiento.direccion}">Dirección</dt>
+                <dd th:text="${establecimiento.direccion}">Dirección</dd>
+
+                <dt th:text="#{establecimiento.descripcion}">Descripción</dt>
+                <dd th:text="${establecimiento.descripcion != null} ? ${establecimiento.descripcion} : '—'">Descripción</dd>
+
+                <dt th:text="#{establecimiento.aforoMaximo}">Aforo máximo</dt>
+                <dd th:text="${establecimiento.aforoMaximo}">100</dd>
+
+                <dt th:text="#{establecimiento.precioReferencia}">Precio</dt>
+                <dd th:text="${#numbers.formatDecimal(establecimiento.precioReferencia, 1, 2)} + ' €'">0,00 €</dd>
+
+                <dt th:text="#{establecimiento.edadMinima}">Edad mínima</dt>
+                <dd th:text="${establecimiento.edadMinima != null} ? ${establecimiento.edadMinima} : '—'">18</dd>
+
+                <dt th:text="#{establecimiento.exigeCuentaConfirmada}">Exige cuenta confirmada</dt>
+                <dd th:text="${establecimiento.exigeCuentaConfirmada} ? #{common.yes} : #{common.no}">Sí</dd>
+
+                <dt th:text="#{establecimiento.aforoPublico}">Aforo público</dt>
+                <dd th:text="${establecimiento.aforoPublico} ? #{common.yes} : #{common.no}">Sí</dd>
+
+                <dt th:text="#{establecimiento.activo}">Activo</dt>
+                <dd th:text="${establecimiento.activo} ? #{common.yes} : #{common.no}">Sí</dd>
+            </dl>
+        </section>
+
+        <!-- Datos de la entidad relacionada (relación 1:N) -->
+        <section class="card">
+            <h2 th:text="#{establecimiento.propietario.heading}">Propietario</h2>
+            <dl>
+                <dt th:text="#{usuario.nombre}">Nombre</dt>
+                <dd th:text="${establecimiento.propietario.nombreCompleto}">Nombre</dd>
+
+                <dt th:text="#{usuario.email}">Email</dt>
+                <dd th:text="${establecimiento.propietario.email}">email</dd>
+
+                <dt th:text="#{usuario.telefono}">Teléfono</dt>
+                <dd th:text="${establecimiento.propietario.telefono}">teléfono</dd>
+            </dl>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{error.title}">Error</title>
+</head>
+<body>
+<main class="container">
+    <section class="card error-page">
+        <h1 th:text="#{error.title}">Error</h1>
+        <p th:text="${errorKey != null} ? #{${errorKey}} : #{error.generic}">Ha ocurrido un error.</p>
+        <a class="btn btn-primary" th:href="@{/establecimientos}" th:text="#{common.back}">Volver</a>
+    </section>
+</main>
+</body>
+</html>

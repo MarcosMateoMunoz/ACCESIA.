@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--
+  Layout base reutilizable. Cada página lo usa así:
+  <html th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+-->
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)" th:lang="${#locale.language}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:replace="${title}">ACCESIA</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<div class="container alerts">
+    <div class="alert alert-success" th:if="${successKey != null}" th:text="#{${successKey}}"></div>
+    <div class="alert alert-error" th:if="${errorKey != null}" th:text="#{${errorKey}}"></div>
+</div>
+
+<th:block th:replace="${content}"></th:block>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

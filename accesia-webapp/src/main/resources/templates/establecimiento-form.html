@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="${modoEdicion} ? #{establecimiento.form.title.edit} : #{establecimiento.form.title.new}">Formulario</title>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="${modoEdicion} ? #{establecimiento.form.title.edit} : #{establecimiento.form.title.new}">Formulario</h1>
+
+    <form class="form card" method="post" enctype="multipart/form-data" th:object="${establecimiento}"
+          th:action="${modoEdicion} ? @{/establecimientos/{id}/update(id=*{id})} : @{/establecimientos/insert}">
+
+        <div class="form-row">
+            <label for="nombre" th:text="#{establecimiento.nombre}">Nombre</label>
+            <input type="text" id="nombre" th:field="*{nombre}" th:errorclass="invalid">
+            <span class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+        </div>
+
+        <div class="form-row">
+            <label for="tipo" th:text="#{establecimiento.tipo}">Tipo</label>
+            <select id="tipo" th:field="*{tipo}" th:errorclass="invalid">
+                <option value="" th:text="#{common.select}">-- Selecciona --</option>
+                <option th:each="t : ${tipos}" th:value="${t}" th:text="#{${'establecimiento.tipo.' + t}}">Tipo</option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></span>
+        </div>
+
+        <div class="form-row">
+            <label for="direccion" th:text="#{establecimiento.direccion}">Dirección</label>
+            <input type="text" id="direccion" th:field="*{direccion}" th:errorclass="invalid">
+            <span class="error" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></span>
+        </div>
+
+        <div class="form-row">
+            <label for="descripcion" th:text="#{establecimiento.descripcion}">Descripción</label>
+            <textarea id="descripcion" rows="3" th:field="*{descripcion}" th:errorclass="invalid"></textarea>
+            <span class="error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-row">
+                <label for="aforoMaximo" th:text="#{establecimiento.aforoMaximo}">Aforo máximo</label>
+                <input type="number" id="aforoMaximo" th:field="*{aforoMaximo}" th:errorclass="invalid">
+                <span class="error" th:if="${#fields.hasErrors('aforoMaximo')}" th:errors="*{aforoMaximo}"></span>
+            </div>
+
+            <div class="form-row">
+                <label for="precioReferencia" th:text="#{establecimiento.precioReferencia}">Precio de referencia (€)</label>
+                <input type="number" step="0.01" id="precioReferencia" th:field="*{precioReferencia}" th:errorclass="invalid">
+                <span class="error" th:if="${#fields.hasErrors('precioReferencia')}" th:errors="*{precioReferencia}"></span>
+            </div>
+
+            <div class="form-row">
+                <label for="edadMinima" th:text="#{establecimiento.edadMinima}">Edad mínima</label>
+                <input type="number" id="edadMinima" th:field="*{edadMinima}" th:errorclass="invalid">
+                <span class="error" th:if="${#fields.hasErrors('edadMinima')}" th:errors="*{edadMinima}"></span>
+            </div>
+        </div>
+
+        <!-- SELECT con los datos de la entidad relacionada (Usuario) -->
+        <div class="form-row">
+            <label for="idPropietario" th:text="#{establecimiento.propietario}">Propietario</label>
+            <select id="idPropietario" th:field="*{idPropietario}" th:errorclass="invalid">
+                <option value="" th:text="#{common.select}">-- Selecciona --</option>
+                <option th:each="u : ${usuarios}" th:value="${u.id}"
+                        th:text="${u.nombreCompleto + ' (' + u.email + ')'}">Propietario</option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('idPropietario')}" th:errors="*{idPropietario}"></span>
+        </div>
+
+        <div class="form-row checks">
+            <label class="check">
+                <input type="checkbox" th:field="*{exigeCuentaConfirmada}">
+                <span th:text="#{establecimiento.exigeCuentaConfirmada}">Exige cuenta confirmada</span>
+            </label>
+            <span class="error" th:if="${#fields.hasErrors('exigeCuentaConfirmada')}" th:errors="*{exigeCuentaConfirmada}"></span>
+
+            <label class="check">
+                <input type="checkbox" th:field="*{aforoPublico}">
+                <span th:text="#{establecimiento.aforoPublico}">Aforo público</span>
+            </label>
+
+            <label class="check">
+                <input type="checkbox" th:field="*{activo}">
+                <span th:text="#{establecimiento.activo}">Activo</span>
+            </label>
+        </div>
+
+        <div class="form-row">
+            <label for="imagenFile" th:text="#{establecimiento.imagen}">Imagen</label>
+            <div th:if="${establecimiento.imagen != null}" class="current-image">
+                <img class="thumb thumb-big" th:src="@{'/uploads/' + ${establecimiento.imagen}}" alt="">
+                <small class="muted" th:text="#{establecimiento.imagen.current}">Imagen actual</small>
+            </div>
+            <input type="file" id="imagenFile" name="imagenFile" accept="image/jpeg,image/png,image/gif,image/webp">
+            <small class="muted" th:text="#{establecimiento.imagen.help}">JPG, PNG, GIF o WEBP. Máximo 2 MB.</small>
+            <span class="error" th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></span>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" th:text="#{common.save}">Guardar</button>
+            <a class="btn" th:href="@{/establecimientos}" th:text="#{common.cancel}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
